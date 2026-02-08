@@ -52,6 +52,13 @@ processResources {
     }
 }
 
+def buildNum = project.findProperty('buildNumber')?.toString()
+if (buildNum) {
+    tasks.named('jar', Jar) {
+        archiveFileName.set("PetarLibSpigot-${version}-${buildNum}.jar")
+    }
+}
+
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
