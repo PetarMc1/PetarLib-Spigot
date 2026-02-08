@@ -7,6 +7,8 @@ in the action bar without using NMS (`net.minecraft.server`). Instad PetarLib us
 (`p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(msg));`)
 ## Features
 
+The Task Sceduler and HTTP Client are copied from the [PetarLib mod](https://github.com/PetarMc1/PetarLib) for fabric.
+Only slight changes were made to make to the logging.
 
 ## Requirements
 - Java: 21 or newer (recommended Java 21+ for Minecraft 1.21.11).
