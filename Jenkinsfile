@@ -29,8 +29,8 @@ pipeline {
 
         stage('List Build Artifacts') {
             steps {
-                echo "Artifacts in build/libs-versioned:"
-                sh 'ls -R build/libs-versioned'
+                echo "Artifacts in build/libs:"
+                sh 'ls -R build/libs'
             }
         }
 
