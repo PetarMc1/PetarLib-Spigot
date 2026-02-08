@@ -32,8 +32,8 @@ jobs:
 
       - name: Prepare deploy structure (/petarlib-spigot)
         run: |
-          mkdir -p deploy/petarlib-spigot
-          cp -a javadoc/. deploy/petarlib-spigot/
+          mkdir -p ./petarlib-spigot/$GITHUB_REF_NAME
+          cp -a ../deploy/petarlib-spigot ./petarlib-spigot/$GITHUB_REF_NAME
           ls -la deploy
 
       - name: Deploy to PetarMc1/javadocs
