@@ -10,13 +10,12 @@ version = project.findProperty("version")
 repositories {
     mavenCentral()
     maven {
-        name = "spigotmc-repo"
-        url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+        name = 'papermc'
+        url = 'https://repo.papermc.io/repository/maven-public/'
     }
 }
-
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.21.11-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
 }
 
 tasks {
@@ -55,7 +54,7 @@ processResources {
 def buildNum = project.findProperty('buildNumber')?.toString()
 if (buildNum) {
     tasks.named('jar', Jar) {
-        archiveFileName.set("PetarLibSpigot-${version}-${buildNum}.jar")
+        archiveFileName.set("PetarLibSpigot-v${version}-${buildNum}.jar")
     }
 }
 
