@@ -1,0 +1,22 @@
+name: PetarLib
+version: '1.0.0'
+main: com.petarmc.petarlib.PetarLib
+api-version: '1.21'
+prefix: PetarLib
+authors: [ Petar_mc ]
+website: https://petarmc.com
+
+commands:
+  petarlib:
+    description: PetarLib main command
+    usage: /petarlib <help|info|version|reload|debug>
+    aliases: [ help, info, version, reload, debug ]
+    permission: petarlib.use
+
+permissions:
+  petarlib.use:
+    description: Allows usage of PetarLib commands
+    default: true
+  petarlib.admin:
+    description: Allows usage of admin PetarLib commands
+    default: op

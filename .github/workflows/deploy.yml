@@ -1,0 +1,53 @@
+name: Build & Deploy
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x gradlew
+
+      - name: Build project and Javadocs
+        run: ./gradlew javadoc --no-daemon
+
+      - name: Publish to Maven
+        env:
+          REPO_USERNAME: ${{ secrets.REPO_USERNAME }}
+          REPO_PASSWORD: ${{ secrets.REPO_PASSWORD }}
+        run: ./gradlew publish -PrepoUsername="$REPO_USERNAME" -PrepoPassword="$REPO_PASSWORD" --no-daemon
+
+      - name: Prepare deploy structure (/petarlib-spigot)
+        run: |
+          mkdir -p deploy/petarlib-spigot
+          cp -a javadoc/. deploy/petarlib-spigot/
+          ls -la deploy
+
+      - name: Deploy to PetarMc1/javadocs
+        env:
+          GH_TOKEN: ${{ secrets.JD_DEPLOY_TOKEN }}
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          git clone https://PetarMc1:$GH_TOKEN@github.com/PetarMc1/javadocs.git deploy-repo
+          cd deploy-repo
+
+          cp -a ../deploy/petarlib-spigot ./petarlib-spigot/$GITHUB_REF_NAME
+
+          git add petarlib-spigot/$GITHUB_REF_NAME
+          git commit -m "Update petarlib-spigot Javadocs (release $GITHUB_REF_NAME)" || echo "No changes"
+          git push
