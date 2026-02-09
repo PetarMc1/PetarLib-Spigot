@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.petarmc.petarlib'
-version = project.findProperty("version")
+version = '0.2.0'
 
 repositories {
     mavenCentral()
