@@ -2,7 +2,10 @@ package com.petarmc.petarlib;
 
 import com.petarmc.petarlib.commands.PetarLibCommand;
 import com.petarmc.petarlib.expansion.PlaceHolderAPIExpansion;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
@@ -15,9 +18,21 @@ public final class PetarLib extends JavaPlugin {
         return plugin;
     }
 
+    //used for adventure
+    @NonNull
+    public BukkitAudiences adventure() {
+        if (this.adventure == null) {
+            throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
+        }
+        return this.adventure;
+    }
+
     @Override
     public void onEnable() {
         plugin = this;
+        //used for adventure
+        this.adventure = BukkitAudiences.create(this);
+
         saveDefaultConfig();
         DebugMode = getConfig().getBoolean("debug", false);
         PetarLibCommand cmdExec = new PetarLibCommand();
@@ -44,5 +59,12 @@ public final class PetarLib extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info("PetarLib stopped successfully!");
+
+
+        //used for adventure
+        if (this.adventure != null) {
+            this.adventure.close();
+            this.adventure = null;
+        }
     }
 }
