@@ -7,8 +7,7 @@ import java.util.Objects;
 
 public final class PetarLib extends JavaPlugin {
     private static PetarLib plugin;
-    public static boolean DebugMode = false; // initialized in onEnable after plugin is set
-
+    public static boolean DebugMode = false;
     public static PetarLib getPlugin() {
         return plugin;
     }

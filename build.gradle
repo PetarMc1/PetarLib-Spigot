@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id("xyz.jpenilla.run-paper") version "2.3.1"
     id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 group = 'com.petarmc.petarlib'
@@ -15,7 +16,8 @@ repositories {
     }
 }
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    compileOnly "com.destroystokyo.paper:paper-api:1.14-R0.1-SNAPSHOT"
+//    implementation 'net.kyori:adventure-platform-bukkit:4.4.1'
 }
 
 tasks {
@@ -82,11 +84,21 @@ publishing {
 javadoc{
     destinationDir = file("$rootDir/javadoc")
     source = sourceSets.main.allJava.matching {
-        exclude 'com/petarmc/petarlib/Petarlib.java'
+        exclude 'com/petarmc/petarlib/PetarLib.java'
         exclude 'com/petarmc/petarlib/commands/*'
     }
     options.encoding = 'UTF-8'
     options.charSet = 'UTF-8'
     options.windowTitle = 'PetarLib Javadocs'
     options.docTitle = 'PetarLib Documentation'
+}
+
+shadowJar{
+    if (project.findProperty('buildNumber')) {
+        archiveFileName.set("PetarLibSpigot-v${version}-${project.findProperty('buildNumber')}.jar")
+    } else {
+        archiveFileName.set("PetarLibSpigot-v${version}.jar")
+    }
+    archiveClassifier.set('')
+//    mergeServiceFiles()
 }
