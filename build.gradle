@@ -33,6 +33,7 @@ tasks {
 
 def targetJavaVersion = 21
 java {
+    withSourcesJar()
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
@@ -70,7 +71,7 @@ publishing {
         register('mavenJava', MavenPublication) {
             groupId = project.maven_group
             artifactId =  'petarlib-bukkit'
-            version = project.findProperty('version')
+            version = version
             from components.java
         }
     }
@@ -99,12 +100,12 @@ javadoc{
     options.docTitle = 'PetarLib Documentation'
 }
 
-shadowJar{
-    if (project.findProperty('buildNumber')) {
-        archiveFileName.set("PetarLibBukkit-v${version}-${project.findProperty('buildNumber')}.jar")
-    } else {
-        archiveFileName.set("PetarLibBukkit-v${version}.jar")
-    }
-    archiveClassifier.set('')
-//    mergeServiceFiles()
-}
+//shadowJar{
+//    if (project.findProperty('buildNumber')) {
+//        archiveFileName.set("PetarLibBukkit-v${version}-${project.findProperty('buildNumber')}.jar")
+//    } else {
+//        archiveFileName.set("PetarLibBukkit-v${version}.jar")
+//    }
+//    archiveClassifier.set('shadow')
+////    mergeServiceFiles()
+//}
