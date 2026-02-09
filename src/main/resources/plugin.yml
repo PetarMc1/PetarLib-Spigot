@@ -5,6 +5,7 @@ api-version: '1.14'
 prefix: PetarLib
 authors: [ Petar_mc ]
 website: https://petarmc.com
+softdepend: ["PlaceholderAPI"]
 
 commands:
   petarlib:
