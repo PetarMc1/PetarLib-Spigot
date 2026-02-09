@@ -1,6 +1,5 @@
 package com.petarmc.petarlib.commands;
 
-import com.petarmc.petarlib.PetarLib;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
