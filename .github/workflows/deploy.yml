@@ -24,12 +24,6 @@ jobs:
       - name: Build project and Javadocs
         run: ./gradlew javadoc --no-daemon
 
-      - name: Publish to Maven
-        env:
-          REPO_USERNAME: ${{ secrets.REPO_USERNAME }}
-          REPO_PASSWORD: ${{ secrets.REPO_PASSWORD }}
-        run: ./gradlew publish -PrepoUsername="$REPO_USERNAME" -PrepoPassword="$REPO_PASSWORD" --no-daemon
-
       - name: Prepare deploy structure (/petarlib-bukkit)
         run: |
           mkdir -p ./petarlib-bukkit/$GITHUB_REF_NAME
@@ -51,3 +45,10 @@ jobs:
           git add petarlib-bukkit/$GITHUB_REF_NAME
           git commit -m "Update petarlib-bukkit Javadocs (release $GITHUB_REF_NAME)" || echo "No changes"
           git push
+
+      - name: Publish to Maven
+        env:
+          REPO_USERNAME: ${{ secrets.REPO_USERNAME }}
+          REPO_PASSWORD: ${{ secrets.REPO_PASSWORD }}
+        run: ./gradlew publish -PrepoUsername="$REPO_USERNAME" -PrepoPassword="$REPO_PASSWORD" --no-daemon
+
