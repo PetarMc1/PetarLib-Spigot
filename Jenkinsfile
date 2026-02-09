@@ -17,7 +17,7 @@ pipeline {
             steps {
                 sh 'chmod +x gradlew'
                 script {
-                    def buildCmd = "./gradlew shadowJar --no-daemon"
+                    def buildCmd = "./gradlew jar --no-daemon"
                     if (env.BUILD_NUMBER?.trim()) {
                         buildCmd += " -PbuildNumber=${env.BUILD_NUMBER}"
                     }

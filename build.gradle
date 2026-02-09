@@ -62,7 +62,7 @@ processResources {
 def buildNum = project.findProperty('buildNumber')?.toString()
 if (buildNum) {
     tasks.named('jar', Jar) {
-        archiveFileName.set("PetarLibSpigot-v${version}-${buildNum}.jar")
+        archiveFileName.set("PetarLibBukkit-v${version}-${buildNum}.jar")
     }
 }
 
