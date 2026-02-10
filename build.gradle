@@ -65,6 +65,9 @@ if (buildNum) {
     tasks.named('jar', Jar) {
         archiveFileName.set("PetarLibBukkit-v${version}-${buildNum}.jar")
     }
+    tasks.named('sourcesJar', Jar) {
+        archiveFileName.set("PetarLibBukkit-sources-v${version}-${buildNum}.jar")
+    }
 }
 
 publishing {
