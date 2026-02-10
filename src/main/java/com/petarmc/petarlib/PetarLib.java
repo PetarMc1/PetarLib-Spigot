@@ -1,15 +1,11 @@
 package com.petarmc.petarlib;
 
 import com.petarmc.petarlib.commands.PetarLibCommand;
-import com.petarmc.petarlib.expansion.PlaceHolderAPIExpansion;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Objects;
 
 public final class PetarLib extends JavaPlugin {
     private static PetarLib plugin;
-    private  boolean isPlaceHolderAPIActive = false;
-    public static boolean DebugMode = false;
     public static PetarLib getPlugin() {
         return plugin;
     }
@@ -17,16 +13,11 @@ public final class PetarLib extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
-
         saveDefaultConfig();
-        DebugMode = getConfig().getBoolean("debug", false);
+        Config.load();
+
         PetarLibCommand cmdExec = new PetarLibCommand();
         Objects.requireNonNull(getCommand("petarlib"), "Command 'petarlib' is not defined in plugin.yml").setExecutor(cmdExec);
-
-        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-           isPlaceHolderAPIActive = true;
-           new PlaceHolderAPIExpansion(this).register();
-        }
 
 
         getLogger().info("-----------------------------------------------------------");
@@ -38,7 +29,8 @@ public final class PetarLib extends JavaPlugin {
         getLogger().info("");
         getLogger().info("");
         getLogger().info("- Version v" + getDescription().getVersion());
-        getLogger().info( isPlaceHolderAPIActive ? "- PlaceHolderAPI detected, registering expansions..."  : "- PlaceHolderAPI not detected, skipping expansions...");
+        getLogger().info( Config.isPlaceHolderAPIActive ? "- PlaceHolderAPI detected, registering expansions..."  : "- PlaceHolderAPI not detected, skipping expansions...");
+        if (Config.debugMode) {getLogger().info("- Debug mode enabled, extra logging will be shown.");};
         getLogger().info("-----------------------------------------------------------");
     }
 
