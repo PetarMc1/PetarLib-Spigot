@@ -1,5 +1,6 @@
 package com.petarmc.petarlib.net;
 
+import com.petarmc.petarlib.Config;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -9,7 +10,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import  static com.petarmc.petarlib.PetarLib.getPlugin;
+
+import static com.petarmc.petarlib.PetarLib.getPlugin;
+// Warrning:
+// This class was copied exactly like it was from PetarLib Farbic and the only chnages made were to the logging!
 /**
  * A simple wrapper around Java's HttpClient with support for retries and asycn execution.
  */
@@ -17,6 +21,14 @@ public class HttpClientWrapper {
     private final HttpClient client;
     private final int maxRetries;
     private final ExecutorService executor;
+
+    /**
+     * Creates a new HttpClientWrapper with a default maximum number of retries from the plugin config.
+     * Callers can use the no-arg constructor to pick up the default, or the (int) constructor to override it.
+     */
+    public HttpClientWrapper() {
+        this(Config.defaultMaxRetries);
+    }
 
     /**
      * Creates a new HttpClientWrapper with a specified maximum number of retries.
@@ -77,7 +89,7 @@ public class HttpClientWrapper {
      * Shuts down the executor used for async HTTP requests.
      */
     public void shutdown() {
-        getPlugin().getLogger().info("Shutting down HttpClient executor");
+        if (Config.debugMode) { getPlugin().getLogger().info("Shutting down HttpClient executor"); }
         executor.shutdownNow();
     }
 }
