@@ -21,13 +21,13 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x gradlew
 
-      - name: Build project and Javadocs
+      - name: Build Javadocs
         run: ./gradlew javadoc --no-daemon
 
       - name: Prepare deploy structure (/petarlib-bukkit)
         run: |
           mkdir -p ./petarlib-bukkit/$GITHUB_REF_NAME
-          cp -a ../deploy/petarlib-bukkit ./petarlib-bukkit/$GITHUB_REF_NAME
+          cp -a ../javadoc ./petarlib-bukkit/$GITHUB_REF_NAME
           ls -la deploy
 
       - name: Deploy to PetarMc1/javadocs
