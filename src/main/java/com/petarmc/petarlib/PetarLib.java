@@ -37,7 +37,7 @@ public final class PetarLib extends JavaPlugin {
         getLogger().info("|_|   \\___|\\__\\__,_|_|  |_____|_|_.__/ ");
         getLogger().info("");
         getLogger().info("");
-        getLogger().info("- Version v0.2.0");
+        getLogger().info("- Version v" + getDescription().getVersion());
         getLogger().info( isPlaceHolderAPIActive ? "- PlaceHolderAPI detected, registering expansions..."  : "- PlaceHolderAPI not detected, skipping expansions...");
         getLogger().info("-----------------------------------------------------------");
     }
