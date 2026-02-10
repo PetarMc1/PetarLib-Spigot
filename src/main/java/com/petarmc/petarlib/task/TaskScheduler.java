@@ -1,5 +1,6 @@
 package com.petarmc.petarlib.task;
 
+import com.petarmc.petarlib.Config;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
@@ -8,10 +9,11 @@ import java.util.concurrent.TimeUnit;
 import static com.petarmc.petarlib.PetarLib.getPlugin;
 
 /**
- * Schedules and executes tasks async or with a delay.
- * Provides safe handling of exceptions and logging.
+ * Schedules and executes tasks async or with a delay. It runs tasks on a separate thread and not on the main server thread.
+ * Never call Bukkit/Spigot/Paper API methods from tasks scheduled with this class, because it can cause crashes and/or data corruption.
+ * Use Bukkit's scheduler ({@link org.bukkit.scheduler.BukkitScheduler#runTask(org.bukkit.plugin.Plugin, java.lang.Runnable)}) for tasks that need to interact with the server API.
  */
-public class TaskScheduler {
+    public class TaskScheduler {
 
     private final ScheduledExecutorService scheduler;
 
@@ -66,12 +68,12 @@ public class TaskScheduler {
      * before forcing shutdown. Logs shutdown progress.
      */
     public void shutdown() {
-        getPlugin().getLogger().info("Shutting down TaskScheduler...");
+        if (Config.debugMode) {getPlugin().getLogger().info("Shutting down TaskScheduler...");}
         scheduler.shutdown();
 
         try {
             if (!scheduler.awaitTermination(5, TimeUnit.SECONDS)) {
-                getPlugin().getLogger().info("Forcing TaskScheduler shutdown...");
+                if (Config.debugMode) {getPlugin().getLogger().info("Forcing TaskScheduler shutdown..."); }
                 scheduler.shutdownNow();
             }
         } catch (InterruptedException e) {
@@ -79,6 +81,6 @@ public class TaskScheduler {
             Thread.currentThread().interrupt();
         }
 
-        getPlugin().getLogger().info("TaskScheduler stopped");
+        if (Config.debugMode) {getPlugin().getLogger().info("TaskScheduler stopped");}
     }
 }
