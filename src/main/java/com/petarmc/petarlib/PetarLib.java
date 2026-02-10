@@ -36,6 +36,7 @@ public final class PetarLib extends JavaPlugin {
         saveDefaultConfig();
         DebugMode = getConfig().getBoolean("debug", false);
         PetarLibCommand cmdExec = new PetarLibCommand();
+        Objects.requireNonNull(getCommand("petarlib"), "Command 'petarlib' is not defined in plugin.yml").setExecutor(cmdExec);
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
            isPlaceHolderAPIActive = true;
