@@ -95,6 +95,7 @@ javadoc{
     destinationDir = file("$rootDir/javadoc")
     source = sourceSets.main.allJava.matching {
         exclude 'com/petarmc/petarlib/PetarLib.java'
+        exclude 'com/petarmc/petarlib/Config.java'
         exclude 'com/petarmc/petarlib/commands/*'
         exclude 'com/petarmc/petarlib/expansion/*'
     }
