@@ -118,3 +118,8 @@ javadoc{
 //    archiveClassifier.set('shadow')
 ////    mergeServiceFiles()
 //}
+printVersion {
+    doLast {
+        println project.version
+    }
+}

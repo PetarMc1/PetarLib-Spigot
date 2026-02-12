@@ -14,6 +14,11 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                scmSkip(
+                    deleteBuild: true,
+                    skipPattern: '.*\\[ci skip\\].*'
+                )
+
                 checkout scm
             }
         }
