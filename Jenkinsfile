@@ -6,6 +6,11 @@ pipeline {
         timestamps()
     }
 
+    environment {
+        REPO_USERNAME = credentials('maven-credentials')
+        REPO_PASSWORD = credentials('maven-credentials')
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -21,8 +26,42 @@ pipeline {
                     if (env.BUILD_NUMBER?.trim()) {
                         buildCmd += " -PbuildNumber=${env.BUILD_NUMBER}"
                     }
-                    echo "Running: ${buildCmd}"
                     sh buildCmd
+                }
+            }
+        }
+
+        stage('Check Version') {
+            steps {
+                script {
+                    def versionOutput = sh(script: "./gradlew -q printVersion", returnStdout: true).trim()
+                    echo "Project version: ${versionOutput}"
+                    env.PROJECT_VERSION = versionOutput
+
+                    if (versionOutput.toUpperCase().contains("SNAPSHOT")) {
+                        currentBuild.description = "<b>⚠ SNAPSHOT Build:</b> API may change between commits."
+                        env.IS_SNAPSHOT = "true"
+                    } else {
+                        env.IS_SNAPSHOT = "false"
+                    }
+                }
+            }
+        }
+
+
+        stage('Publish Snapshot') {
+            when {
+                expression { env.IS_SNAPSHOT == 'true' }
+            }
+            steps {
+                script {
+                    sh """
+                        ./gradlew publish \
+                            -PrepoUsername="${REPO_USERNAME}" \
+                            -PrepoPassword="${REPO_PASSWORD}" \
+                            --no-daemon
+                    """
+                    echo "Snapshot published successfully."
                 }
             }
         }

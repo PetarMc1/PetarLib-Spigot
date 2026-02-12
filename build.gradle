@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.petarmc.petarlib'
-version = '0.3.1'
+version = '0.4.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -70,19 +70,23 @@ if (buildNum) {
     }
 }
 
+def repoUrl = project.version.toString().toUpperCase().contains("SNAPSHOT") ?
+        'https://repo.petarmc.com/repository/snapshots/' :
+        'https://repo.petarmc.com/repository/releases/'
+
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
             groupId = project.maven_group
-            artifactId =  'petarlib-bukkit'
-            version = version
+            artifactId = 'petarlib-bukkit'
+            version = project.version
             from components.java
         }
     }
 
     repositories {
         maven {
-            url = uri('https://repo.petarmc.com/repository/releases/')
+            url = uri(repoUrl)
             credentials {
                 username = project.findProperty('repoUsername') ?: ""
                 password = project.findProperty('repoPassword') ?: ""

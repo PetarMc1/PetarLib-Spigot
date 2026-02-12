@@ -24,10 +24,10 @@ jobs:
       - name: Build Javadocs
         run: ./gradlew javadoc --no-daemon
 
-      - name: Prepare deploy structure (/petarlib-bukkit)
+      - name: Prepare deploy structure (/deploy/petarlib-bukkit)
         run: |
-          mkdir -p ./petarlib-bukkit/$GITHUB_REF_NAME
-          cp -a ../javadoc ./petarlib-bukkit/$GITHUB_REF_NAME
+          mkdir -p ./deploy/petarlib-bukkit/$GITHUB_REF_NAME
+          cp -a ./javadoc ./deploy/petarlib-bukkit/$GITHUB_REF_NAME
           ls -la deploy
 
       - name: Deploy to PetarMc1/javadocs
@@ -40,7 +40,7 @@ jobs:
           git clone https://PetarMc1:$GH_TOKEN@github.com/PetarMc1/javadocs.git deploy-repo
           cd deploy-repo
 
-          cp -a ../deploy/petarlib-bukkit ./petarlib-bukkit/$GITHUB_REF_NAME
+          cp -a ../deploy/petarlib-bukkit ./
 
           git add petarlib-bukkit/$GITHUB_REF_NAME
           git commit -m "Update petarlib-bukkit Javadocs (release $GITHUB_REF_NAME)" || echo "No changes"
@@ -51,4 +51,3 @@ jobs:
           REPO_USERNAME: ${{ secrets.REPO_USERNAME }}
           REPO_PASSWORD: ${{ secrets.REPO_PASSWORD }}
         run: ./gradlew publish -PrepoUsername="$REPO_USERNAME" -PrepoPassword="$REPO_PASSWORD" --no-daemon
-
