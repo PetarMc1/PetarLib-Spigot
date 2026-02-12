@@ -60,15 +60,11 @@ processResources {
     }
 }
 
-def buildNum = project.findProperty('buildNumber')?.toString()
+def buildNum = project.findProperty('buildNumber')?.toString();
 if (buildNum) {
-    tasks.named('jar', Jar) {
-        archiveFileName.set("PetarLibBukkit-v${version}-${buildNum}.jar")
-    }
-    tasks.named('sourcesJar', Jar) {
-        archiveFileName.set("PetarLibBukkit-sources-v${version}-${buildNum}.jar")
-    }
+    project.version = "${project.version}-${buildNum}"
 }
+
 
 def repoUrl = project.version.toString().toUpperCase().contains("SNAPSHOT") ?
         'https://repo.petarmc.com/repository/snapshots/' :

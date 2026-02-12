@@ -44,7 +44,7 @@ pipeline {
                     env.PROJECT_VERSION = versionOutput
 
                     if (versionOutput.toUpperCase().contains("SNAPSHOT")) {
-                        currentBuild.description = "<b>⚠ SNAPSHOT Build:</b> API may change between commits."
+                        currentBuild.description = "**⚠ SNAPSHOT Build:** API may change between commits."
                         env.IS_SNAPSHOT = "true"
                     } else {
                         env.IS_SNAPSHOT = "false"
