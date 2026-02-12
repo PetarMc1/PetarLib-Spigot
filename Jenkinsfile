@@ -54,22 +54,25 @@ pipeline {
         }
 
 
-        stage('Publish Snapshot') {
-            when {
-                expression { env.IS_SNAPSHOT == 'true' }
-            }
-            steps {
-                script {
-                    sh """
-                        ./gradlew publish \
-                            -PrepoUsername="${REPO_USERNAME}" \
-                            -PrepoPassword="${REPO_PASSWORD}" \
-                            --no-daemon
-                    """
-                    echo "Snapshot published successfully."
-                }
-            }
+    stage('Publish Snapshot') {
+        when {
+            expression { env.IS_SNAPSHOT == 'true' }
         }
+        steps {
+            withCredentials([usernamePassword(credentialsId: 'maven-credentials',
+                                              usernameVariable: 'REPO_USER',
+                                              passwordVariable: 'REPO_PASS')]) {
+                sh '''
+                    ./gradlew publish \
+                        -PrepoUsername="$REPO_USER" \
+                        -PrepoPassword="$REPO_PASS" \
+                        --no-daemon
+                '''
+            }
+            echo "Snapshot published successfully."
+        }
+    }
+
 
         stage('List Build Artifacts') {
             steps {
