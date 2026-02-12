@@ -10,8 +10,8 @@ softdepend: ["PlaceholderAPI"]
 commands:
   petarlib:
     description: PetarLib main command
-    usage: /petarlib <help|info|version|reload|debug>
-    aliases: [ help, info, version, reload, debug ]
+    usage: /petarlib <help|info|version|send|reload|debug>
+    aliases: [ help, info, version, send, reload, debug ]
     permission: petarlib.use
 
 permissions:
@@ -20,4 +20,7 @@ permissions:
     default: true
   petarlib.admin:
     description: Allows usage of admin PetarLib commands
+    default: op
+  petarlib.send:
+    description: Allows usage of /petarlib send <player> <message> <type>
     default: op

@@ -118,7 +118,7 @@ javadoc{
 //    archiveClassifier.set('shadow')
 ////    mergeServiceFiles()
 //}
-printVersion {
+task printVersion {
     doLast {
         println project.version
     }

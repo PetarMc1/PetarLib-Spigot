@@ -16,4 +16,7 @@
 config_version: 1
 
 debug: false # Whether to enable debug mode for the plugin, which may provide additional logging and information for troubleshooting.
+
+# If you added this plugin as a dependency of another plugin, you dont have to chnage these settings.
+# However, if you are using things like the /petarlib send command you might need to check these settings.
 defaultMaxRetries: 3 # Default maximum number of retries for failed operations for the HTTP client.
