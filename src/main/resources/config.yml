@@ -20,3 +20,5 @@ debug: false # Whether to enable debug mode for the plugin, which may provide ad
 # If you added this plugin as a dependency of another plugin, you dont have to chnage these settings.
 # However, if you are using things like the /petarlib send command you might need to check these settings.
 defaultMaxRetries: 3 # Default maximum number of retries for failed operations for the HTTP client.
+use-minimessage: true # Whether to use MiniMessage format for messages sent using the /petarlib send <player> <message>
+# Warrning: Enabling this will disable legacy color codes (e.g., &c) in favor of MiniMessage tags (e.g., <red>), which may require updating existing messages to the new format.
