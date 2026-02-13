@@ -95,15 +95,15 @@ public class PetarLibCommand implements CommandExecutor {
                 sendMessage(sender, Config.getMessage("reload"));
                 break;
             case "send":
-                if (args.length < 4) {
-                    sendMessage(sender, Config.getMessage("usage-send"));
-                    return true;
-                }
                 if (!sender.hasPermission("petarlib.send")) {
                     sendMessage(sender, Config.getMessage("no-permission"));
                     if (Config.debugMode) {
                         getPlugin().getLogger().info("User" + sender + " attempted to a  command without permission.");
                     }
+                    return true;
+                }
+                if (args.length < 4) {
+                    sendMessage(sender, Config.getMessage("usage-send"));
                     return true;
                 }
                 Type type = args[1].equalsIgnoreCase("actionbar") ? Type.ACTIONBAR : args[1].equalsIgnoreCase("chat") ? Type.CHAT : args[1].equalsIgnoreCase("title") ? Type.TITLE : null;
