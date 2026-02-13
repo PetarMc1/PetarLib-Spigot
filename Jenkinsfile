@@ -26,6 +26,7 @@ pipeline {
         stage('Check Version') {
             steps {
                 script {
+                    sh 'chmod +x gradlew'
                     def versionOutput = sh(script: "./gradlew -q printVersion", returnStdout: true).trim()
                     echo "Project version: ${versionOutput}"
                     env.PROJECT_VERSION = versionOutput
@@ -68,7 +69,6 @@ pipeline {
 
         stage('Build Project') {
             steps {
-                sh 'chmod +x gradlew'
                 script {
                     def buildCmd = "./gradlew clean build --no-daemon"
                     if (env.BUILD_NUMBER?.trim()) {
