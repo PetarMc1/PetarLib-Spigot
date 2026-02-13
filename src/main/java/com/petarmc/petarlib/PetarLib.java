@@ -19,6 +19,7 @@ public final class PetarLib extends JavaPlugin {
 
         PetarLibCommand cmdExec = new PetarLibCommand();
         Objects.requireNonNull(getCommand("petarlib"), "Command 'petarlib' is not defined in plugin.yml").setExecutor(cmdExec);
+        Objects.requireNonNull(getCommand("petarlib"), "Command 'petarlib' is not defined in plugin.yml").setTabCompleter(new com.petarmc.petarlib.commands.TabCompletion());
 
         Bukkit.getConsoleSender().sendMessage("-----------------------------------------------------------");
         Bukkit.getConsoleSender().sendMessage(" ____      _             _     _ _     ");

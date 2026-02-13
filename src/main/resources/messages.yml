@@ -1,10 +1,14 @@
 # All messages use the MiniMessage format. Currently no legacy color codes are supported.
-usage-send: "<yellow>Usage: /petarlib send <player> <message> <type>"
+# There are some placeholders available for messages:
+# {version} - The current version of PetarLib.
+# {author} - The author of PetarLib (Petar_mc).
+
+usage-send: "<yellow>Usage: /petarlib send <type> <player> <message>"
 info-version: "<green>PetarLib version v{version}"
 reload: "<green>PetarLib configuration reloaded."
 debug-enabled: "<green>Debug mode set to <green>true"
 debug-disabled: "<green>Debug mode set to <red>false"
 no-permission: "<red>You don't have permission to use this command."
 player-not-found: "<red>Player not found."
-invalid-type: "<red>Invalid type. Use 'actionbar', 'chat', or 'title'."
+invalid-type: "<red>Invalid type. Use 'actionbar' or 'chat'."
 unknown-subcommand: "<red>Unknown subcommand. Use /petarlib help"

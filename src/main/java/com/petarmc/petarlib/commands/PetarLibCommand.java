@@ -106,17 +106,17 @@ public class PetarLibCommand implements CommandExecutor {
                     }
                     return true;
                 }
-                Player target = getPlugin().getServer().getPlayer(args[1]);
-                Type type = args[args.length - 1].equalsIgnoreCase("actionbar") ? Type.ACTIONBAR : args[args.length - 1].equalsIgnoreCase("chat") ? Type.CHAT : args[args.length - 1].equalsIgnoreCase("title") ? Type.TITLE : null;
-                if (target == null) {
-                    sendMessage(sender, Config.getMessage("player-not-found"));
-                    return true;
-                }
+                Type type = args[1].equalsIgnoreCase("actionbar") ? Type.ACTIONBAR : args[1].equalsIgnoreCase("chat") ? Type.CHAT : args[1].equalsIgnoreCase("title") ? Type.TITLE : null;
+                Player target = getPlugin().getServer().getPlayer(args[2]);
                 if (type == null) {
                     sendMessage(sender, Config.getMessage("invalid-type"));
                     return true;
                 }
-                String message = String.join(" ", Arrays.copyOfRange(args, 2, args.length - 1));
+                if (target == null) {
+                    sendMessage(sender, Config.getMessage("player-not-found"));
+                    return true;
+                }
+                String message = String.join(" ", Arrays.copyOfRange(args, 3, args.length));
                 petarLibSendCmd(message, target, type);
                 break;
             case "debug":
@@ -148,7 +148,7 @@ public class PetarLibCommand implements CommandExecutor {
             sender.sendMessage(mm.deserialize("<yellow>/petarlib help<white> - Show this help message"));
             sender.sendMessage(mm.deserialize("<yellow>/petarlib info<white> - Show plugin information"));
             sender.sendMessage(mm.deserialize("<yellow>/petarlib version<white> - Show plugin version"));
-            sender.sendMessage(mm.deserialize("<yellow>/petarlib send <player> <message> <type><white> - Send a message to a player. Type can be 'chat' or 'actionbar'"));
+            sender.sendMessage(mm.deserialize("<yellow>/petarlib send <type> <player> <message><white> - Send a message to a player. Type can be 'chat' or 'actionbar'"));
             sender.sendMessage(mm.deserialize("<yellow>/petarlib reload<white> - Reload plugin config"));
             sender.sendMessage(mm.deserialize("<yellow>/petarlib debug<white> - Toggle debug mode"));
     }
