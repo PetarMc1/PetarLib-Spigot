@@ -2,7 +2,6 @@ package com.petarmc.petarlib.commands;
 
 import com.petarmc.petarlib.Config;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,8 +9,6 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.Map;
-import java.util.HashMap;
 
 import static com.petarmc.petarlib.PetarLib.getPlugin;
 
@@ -88,7 +85,9 @@ public class PetarLibCommand implements CommandExecutor {
             case "reload":
                 if (!sender.hasPermission("petarlib.admin")) {
                     sendMessage(sender, Config.getMessage("no-permission"));
-                    getPlugin().getLogger().info("User" + sender + " attempted to a  command without permission.") ;
+                    if (Config.debugMode) {
+                        getPlugin().getLogger().info("User" + sender + " attempted to a  command without permission.");
+                    }
                     return true;
                 }
                 getPlugin().reloadConfig();
@@ -102,7 +101,9 @@ public class PetarLibCommand implements CommandExecutor {
                 }
                 if (!sender.hasPermission("petarlib.send")) {
                     sendMessage(sender, Config.getMessage("no-permission"));
-                    getPlugin().getLogger().info("User" + sender + " attempted to a  command without permission.") ;
+                    if (Config.debugMode) {
+                        getPlugin().getLogger().info("User" + sender + " attempted to a  command without permission.");
+                    }
                     return true;
                 }
                 Player target = getPlugin().getServer().getPlayer(args[1]);
@@ -121,7 +122,9 @@ public class PetarLibCommand implements CommandExecutor {
             case "debug":
                 if (!sender.hasPermission("petarlib.admin")) {
                     sendMessage(sender, Config.getMessage("no-permission"));
-                    getPlugin().getLogger().info("User" + sender + " attempted to a  command without permission.") ;
+                    if (Config.debugMode) {
+                        getPlugin().getLogger().info("User" + sender + " attempted to a  command without permission.");
+                    }
                     return true;
                 }
                 boolean currentDebug = getPlugin().getConfig().getBoolean("debug");
