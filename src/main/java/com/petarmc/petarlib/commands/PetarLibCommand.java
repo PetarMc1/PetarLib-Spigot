@@ -88,6 +88,7 @@ public class PetarLibCommand implements CommandExecutor {
             case "reload":
                 if (!sender.hasPermission("petarlib.admin")) {
                     sendMessage(sender, Config.getMessage("no-permission"));
+                    getPlugin().getLogger().info("User" + sender + " attempted to a  command without permission.") ;
                     return true;
                 }
                 getPlugin().reloadConfig();
@@ -101,6 +102,7 @@ public class PetarLibCommand implements CommandExecutor {
                 }
                 if (!sender.hasPermission("petarlib.send")) {
                     sendMessage(sender, Config.getMessage("no-permission"));
+                    getPlugin().getLogger().info("User" + sender + " attempted to a  command without permission.") ;
                     return true;
                 }
                 Player target = getPlugin().getServer().getPlayer(args[1]);
@@ -119,6 +121,7 @@ public class PetarLibCommand implements CommandExecutor {
             case "debug":
                 if (!sender.hasPermission("petarlib.admin")) {
                     sendMessage(sender, Config.getMessage("no-permission"));
+                    getPlugin().getLogger().info("User" + sender + " attempted to a  command without permission.") ;
                     return true;
                 }
                 boolean currentDebug = getPlugin().getConfig().getBoolean("debug");
