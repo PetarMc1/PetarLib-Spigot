@@ -23,19 +23,6 @@ pipeline {
             }
         }
 
-        stage('Build Project') {
-            steps {
-                sh 'chmod +x gradlew'
-                script {
-                    def buildCmd = "./gradlew build --no-daemon"
-                    if (env.BUILD_NUMBER?.trim()) {
-                        buildCmd += " -PbuildNumber=${env.BUILD_NUMBER}"
-                    }
-                    sh buildCmd
-                }
-            }
-        }
-
         stage('Check Version') {
             steps {
                 script {
@@ -53,31 +40,42 @@ pipeline {
             }
         }
 
-
-    stage('Publish Snapshot') {
-        when {
-            expression { env.IS_SNAPSHOT == 'true' }
-        }
-        steps {
-            withCredentials([usernamePassword(credentialsId: 'maven-credentials',
-                                              usernameVariable: 'REPO_USER',
-                                              passwordVariable: 'REPO_PASS')]) {
-                sh '''
-                    ./gradlew publish \
-                        -PrepoUsername="$REPO_USER" \
-                        -PrepoPassword="$REPO_PASS" \
-                        --no-daemon
-                '''
-            }
-            echo "Snapshot published successfully."
-        }
-    }
-
-
-        stage('List Build Artifacts') {
+        stage('Run Tests') {
             steps {
-                echo "Artifacts in build/libs:"
-                sh 'ls -R build/libs'
+                sh './gradlew test --no-daemon'
+            }
+        }
+
+        stage('Publish Snapshot') {
+            when {
+                expression { env.IS_SNAPSHOT == 'true' }
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'maven-credentials',
+                                                  usernameVariable: 'REPO_USER',
+                                                  passwordVariable: 'REPO_PASS')]) {
+                    sh '''
+                        ./gradlew publish \
+                            -PrepoUsername="$REPO_USER" \
+                            -PrepoPassword="$REPO_PASS" \
+                            --no-daemon
+                    '''
+                }
+                echo "Snapshot published successfully."
+            }
+        }
+
+
+        stage('Build Project') {
+            steps {
+                sh 'chmod +x gradlew'
+                script {
+                    def buildCmd = "./gradlew clean build --no-daemon"
+                    if (env.BUILD_NUMBER?.trim()) {
+                        buildCmd += " -PbuildNumber=${env.BUILD_NUMBER}"
+                    }
+                    sh buildCmd
+                }
             }
         }
 
