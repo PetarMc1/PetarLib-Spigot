@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class TabCompletion implements TabCompleter {
     private static final List<String> ADMIN_SUBCOMMANDS = Arrays.asList("reload", "debug");
-    private static final List<String> BASE_SUBCOMMANDS = Arrays.asList("help", "info", "version", "send");
+    private static final List<String> BASE_SUBCOMMANDS = Arrays.asList("help", "info", "version");
     private static final List<String> MESSAGE_TYPES = Arrays.asList("chat", "actionbar");
 
     @Override
@@ -30,6 +30,9 @@ public class TabCompletion implements TabCompleter {
 
         if (args.length == 1) {
             List<String> options = new ArrayList<>(BASE_SUBCOMMANDS);
+            if (sender.hasPermission("petarlib.send")) {
+                options.add("send");
+            }
             if (sender.hasPermission("petarlib.admin")) {
                 options.addAll(ADMIN_SUBCOMMANDS);
             }
@@ -39,7 +42,7 @@ public class TabCompletion implements TabCompleter {
         String sub = args[0].toLowerCase(Locale.ROOT);
         switch (sub) {
             case "send":
-                if (!sender.hasPermission("petarlib.send") && !sender.hasPermission("petarlib.admin")) {
+                if (!sender.hasPermission("petarlib.send")) {
                     return Collections.emptyList();
                 }
                 if (args.length == 2) {
