@@ -11,7 +11,6 @@ commands:
   petarlib:
     description: PetarLib main command
     usage: /petarlib <help|info|version|send|reload|debug>
-    aliases: [ help, info, version, send, reload, debug ]
     permission: petarlib.use
 
 permissions:
