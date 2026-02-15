@@ -85,7 +85,8 @@ publishing {
             groupId = project.maven_group
             artifactId = 'petarlib-bukkit'
             version = project.version
-            from components.java
+            artifact tasks.named('jar')
+            artifact tasks.named('sourcesJar')
         }
     }
 
