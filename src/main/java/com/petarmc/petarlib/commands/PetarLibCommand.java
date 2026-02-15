@@ -107,11 +107,27 @@ public class PetarLibCommand implements CommandExecutor {
                     return true;
                 }
                 Type type = args[1].equalsIgnoreCase("actionbar") ? Type.ACTIONBAR : args[1].equalsIgnoreCase("chat") ? Type.CHAT : args[1].equalsIgnoreCase("title") ? Type.TITLE : null;
-                Player target = getPlugin().getServer().getPlayer(args[2]);
+                String targetArg = args[2];
+
                 if (type == null) {
                     sendMessage(sender, Config.getMessage("invalid-type"));
                     return true;
                 }
+
+                if (targetArg.equalsIgnoreCase("all")) {
+                    java.util.Collection<? extends Player> online = getPlugin().getServer().getOnlinePlayers();
+                    if (online == null || online.isEmpty()) {
+                        sendMessage(sender, Config.getMessage("player-not-found"));
+                        return true;
+                    }
+                    String messageAll = String.join(" ", Arrays.copyOfRange(args, 3, args.length));
+                    for (Player p : online) {
+                        petarLibSendCmd(messageAll, p, type);
+                    }
+                    break;
+                }
+
+                Player target = getPlugin().getServer().getPlayer(targetArg);
                 if (target == null) {
                     sendMessage(sender, Config.getMessage("player-not-found"));
                     return true;
