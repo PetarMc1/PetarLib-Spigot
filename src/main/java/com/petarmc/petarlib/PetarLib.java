@@ -1,20 +1,39 @@
 package com.petarmc.petarlib;
 
 import com.petarmc.petarlib.commands.PetarLibCommand;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.plugin.java.JavaPlugin;
-import java.util.Objects;
 import org.bukkit.Bukkit;
+
+import org.jspecify.annotations.NonNull;
+import java.util.Objects;
 
 public final class PetarLib extends JavaPlugin {
     private static PetarLib plugin;
+    private BukkitAudiences adventure;
     public static PetarLib getPlugin() {
         return plugin;
     }
 
+    @NonNull
+    public BukkitAudiences adventure() {
+        if (this.adventure == null) {
+            throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
+        }
+        return this.adventure;
+    }
     @Override
     public void onEnable() {
         plugin = this;
         saveDefaultConfig();
+        // Only create BukkitAudiences when not running on Paper. Paper provides native
+        // Adventure support, so creating a BukkitAudiences instance on Paper servers
+        // can be unnecessary and causes issues
+        if (!CheckForPaper.isPaperServer()) {
+            this.adventure = BukkitAudiences.create(this);
+        } else {
+            this.adventure = null;
+        }
         Config.load();
 
         PetarLibCommand cmdExec = new PetarLibCommand();
@@ -29,14 +48,18 @@ public final class PetarLib extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage("|_|   \\___|\\__\\__,_|_|  |_____|_|_.__/ ");
         Bukkit.getConsoleSender().sendMessage("");
         Bukkit.getConsoleSender().sendMessage("");
-        Bukkit.getConsoleSender().sendMessage("- Version v" + getDescription().getVersion());
+        Bukkit.getConsoleSender().sendMessage("- Running version v" + getDescription().getVersion() + " for" + (CheckForPaper.isPaperServer() ? " Paper" : " Spigot/CraftBukkit")+".");
         Bukkit.getConsoleSender().sendMessage(Config.isPlaceHolderAPIActive ? "- PlaceHolderAPI detected, registering expansions..." : "- PlaceHolderAPI not detected, skipping expansions...");
         if (Config.debugMode) { Bukkit.getConsoleSender().sendMessage("- Debug mode enabled, extra logging will be shown."); }
         Bukkit.getConsoleSender().sendMessage("-----------------------------------------------------------");
     }
 
+
     @Override
     public void onDisable() {
-
+        if (this.adventure != null) {
+            this.adventure.close();
+            this.adventure = null;
+        }
     }
 }
