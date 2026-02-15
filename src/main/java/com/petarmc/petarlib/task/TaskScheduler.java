@@ -51,9 +51,10 @@ import static com.petarmc.petarlib.PetarLib.getPlugin;
      * Exceptions thrown by the task are caught and logged.
      *
      * @param r       the runnable task to execute
-     * @param delayMs the delay in ms before executing the task
+     * @param delay the delay in ms before executing the task
      */
-    public void runDelayed(Runnable r, long delayMs) {
+    public void runDelayed(Runnable r, int delay, TimeUnit unit) {
+        long delayMs = unit.toMillis(delay);
         scheduler.schedule(() -> {
             try {
                 r.run();
@@ -82,5 +83,28 @@ import static com.petarmc.petarlib.PetarLib.getPlugin;
         }
 
         if (Config.debugMode) {getPlugin().getLogger().info("TaskScheduler stopped");}
+    }
+
+    /**
+     * Schedules a repeating task with an initial delay and period.
+     * Exceptions thrown by the task are caught and logged.
+     *
+     * @param r            the runnable task to execute
+     * @param period       the period between subsequent executions (in the given unit)
+     * @param initialDelay the delay before the first execution (in the given unit)
+     * @param unit         the time unit for initialDelay and period
+     */
+
+    public void runRepeating(Runnable r, int period, int initialDelay, TimeUnit unit) {
+        long initialDelayMs = unit.toMillis(initialDelay);
+        long periodMs = unit.toMillis(period);
+
+        scheduler.scheduleAtFixedRate(() -> {
+            try {
+                r.run();
+            } catch (Throwable t) {
+                getPlugin().getLogger().severe("Repeating task threw: " + t.getMessage());
+            }
+        }, initialDelayMs, periodMs, TimeUnit.MILLISECONDS);
     }
 }
