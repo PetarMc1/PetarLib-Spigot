@@ -27,7 +27,7 @@ jobs:
       - name: Prepare deploy structure (/deploy/petarlib-bukkit)
         run: |
           mkdir -p ./deploy/petarlib-bukkit/$GITHUB_REF_NAME
-          cp -a ./javadoc ./deploy/petarlib-bukkit/$GITHUB_REF_NAME
+          cp -a ./javadoc/. ./deploy/petarlib-bukkit/$GITHUB_REF_NAME
           ls -la deploy
 
       - name: Deploy to PetarMc1/javadocs
