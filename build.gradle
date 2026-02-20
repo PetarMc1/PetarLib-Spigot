@@ -6,7 +6,14 @@ plugins {
 }
 
 group = 'com.petarmc.petarlib'
-version = '0.4.0'
+version = '0.4.1'
+
+def publishExcludes = [
+        'com/petarmc/petarlib/PetarLib*',
+        'com/petarmc/petarlib/Config*',
+        'com/petarmc/petarlib/commands/**',
+        'com/petarmc/petarlib/expansion/**'
+]
 
 repositories {
     mavenCentral()
@@ -79,40 +86,30 @@ def repoUrl = project.version.toString().toUpperCase().contains("SNAPSHOT") ?
         'https://repo.petarmc.com/repository/snapshots/' :
         'https://repo.petarmc.com/repository/releases/'
 
-publishing {
-    publications {
-        register('mavenJava', MavenPublication) {
-            groupId = project.maven_group
-            artifactId = 'petarlib-bukkit'
-            version = project.version
-            artifact tasks.named('jar')
-            artifact tasks.named('sourcesJar')
-        }
-    }
-
-    repositories {
-        maven {
-            url = uri(repoUrl)
-            credentials {
-                username = project.findProperty('repoUsername') ?: ""
-                password = project.findProperty('repoPassword') ?: ""
-            }
-        }
-    }
-}
 
 javadoc{
     destinationDir = file("$rootDir/javadoc")
     source = sourceSets.main.allJava.matching {
-        exclude 'com/petarmc/petarlib/PetarLib.java'
-        exclude 'com/petarmc/petarlib/Config.java'
-        exclude 'com/petarmc/petarlib/commands/*'
-        exclude 'com/petarmc/petarlib/expansion/*'
+        exclude publishExcludes
     }
     options.encoding = 'UTF-8'
     options.charSet = 'UTF-8'
     options.windowTitle = 'PetarLib Javadocs'
     options.docTitle = 'PetarLib Documentation'
+}
+
+tasks.register('mavenJar', Jar) {
+    from sourceSets.main.output
+    exclude publishExcludes
+    destinationDirectory = layout.buildDirectory.dir('libs/maven')
+}
+
+tasks.register('mavenSourcesJar', Jar) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allSource.matching {
+        exclude publishExcludes
+    }
+    destinationDirectory = layout.buildDirectory.dir('libs/maven')
 }
 
 tasks.register('printVersion') {
@@ -131,4 +128,26 @@ shadowJar {
 tasks.build {
     dependsOn tasks.named('jar')
     dependsOn tasks.named('shadowJar')
+}
+
+publishing {
+    publications {
+        register('mavenJava', MavenPublication) {
+            groupId = project.maven_group
+            artifactId = 'petarlib-bukkit'
+            version = project.version
+            artifact tasks.named('mavenJar')
+            artifact tasks.named('mavenSourcesJar')
+        }
+    }
+
+    repositories {
+        maven {
+            url = uri(repoUrl)
+            credentials {
+                username = project.findProperty('repoUsername') ?: ""
+                password = project.findProperty('repoPassword') ?: ""
+            }
+        }
+    }
 }
