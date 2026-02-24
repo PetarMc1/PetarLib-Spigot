@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.petarmc.petarlib'
-version = '0.5.0'
+version = '0.5.1'
 
 def publishExcludes = [
         'com/petarmc/petarlib/PetarLib*',
@@ -42,6 +42,8 @@ dependencies {
 
     bukkitImplementation 'net.kyori:adventure-platform-bukkit:4.4.1'
     bukkitImplementation 'net.kyori:adventure-text-minimessage:4.26.1'
+
+    implementation("org.bstats:bstats-bukkit:3.2.0")
 }
 
 tasks {
@@ -120,9 +122,10 @@ tasks.register('printVersion') {
 shadowJar {
     archiveClassifier.set('')
     mergeServiceFiles()
-    configurations = [project.configurations.bukkitImplementation]
+    configurations = [project.configurations.bukkitImplementation, project.configurations.runtimeClasspath]
 
     relocate 'net.kyori', 'com.petarmc.petarlib.kyori'
+    relocate "org.bstats", project.group.toString()
 }
 
 

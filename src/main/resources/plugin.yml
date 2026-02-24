@@ -1,5 +1,5 @@
 name: PetarLib
-version: '0.5.0'
+version: '0.5.1'
 main: com.petarmc.petarlib.PetarLib
 api-version: '1.16.5'
 prefix: PetarLib

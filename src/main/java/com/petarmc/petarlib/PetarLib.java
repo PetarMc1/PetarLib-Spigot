@@ -2,6 +2,8 @@ package com.petarmc.petarlib;
 
 import com.petarmc.petarlib.commands.PetarLibCommand;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 
@@ -31,6 +33,13 @@ public final class PetarLib extends JavaPlugin {
         saveDefaultConfig();
         this.adventure = BukkitAudiences.create(this);
         Config.load();
+
+        // bStats metrics
+        int pluginId = 29749;
+        Metrics metrics = new Metrics(this, pluginId);
+        metrics.addCustomChart(
+                new SimplePie("chart_id", () -> "My value")
+        );
 
         PetarLibCommand cmdExec = new PetarLibCommand();
         Objects.requireNonNull(getCommand("petarlib"), "Command 'petarlib' is not defined in plugin.yml").setExecutor(cmdExec);
