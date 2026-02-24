@@ -6,7 +6,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.util.List;
 
 import static com.petarmc.petarlib.PetarLib.getPlugin;
 
@@ -19,7 +18,7 @@ public class Config {
     public static void reloadMessages(){ messagesConfig = YamlConfiguration.loadConfiguration(messagesFile); }
     public static String getMessage(String path) { return applyPlaceholders(getMessagesConfig().getString(path)); }
     private static File messagesFile = new File(getPlugin().getDataFolder(), "messages.yml");
-    private static FileConfiguration messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);;
+    private static FileConfiguration messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
 
     private static String applyPlaceholders(String message) {
         if (message == null) return null;
