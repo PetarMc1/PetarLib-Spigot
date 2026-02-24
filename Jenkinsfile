@@ -70,7 +70,7 @@ pipeline {
         stage('Build Project') {
             steps {
                 script {
-                    def buildCmd = "./gradlew clean build --no-daemon"
+                    def buildCmd = "./gradlew clean shadowJar --no-daemon"
                     if (env.BUILD_NUMBER?.trim()) {
                         buildCmd += " -PbuildNumber=${env.BUILD_NUMBER}"
                     }
