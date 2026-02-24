@@ -22,18 +22,14 @@ public final class PetarLib extends JavaPlugin {
         }
         return this.adventure;
     }
+    public boolean hasAdventure() {
+        return this.adventure != null;
+    }
     @Override
     public void onEnable() {
         plugin = this;
         saveDefaultConfig();
-        // Only create BukkitAudiences when not running on Paper. Paper provides native
-        // Adventure support, so creating a BukkitAudiences instance on Paper servers
-        // can be unnecessary and causes issues
-        if (!CheckForPaper.isPaperServer()) {
-            this.adventure = BukkitAudiences.create(this);
-        } else {
-            this.adventure = null;
-        }
+        this.adventure = BukkitAudiences.create(this);
         Config.load();
 
         PetarLibCommand cmdExec = new PetarLibCommand();
@@ -51,6 +47,7 @@ public final class PetarLib extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage("- Running version v" + getDescription().getVersion() + " for" + (CheckForPaper.isPaperServer() ? " Paper" : " Spigot/CraftBukkit")+".");
         Bukkit.getConsoleSender().sendMessage(Config.isPlaceHolderAPIActive ? "- PlaceHolderAPI detected, registering expansions..." : "- PlaceHolderAPI not detected, skipping expansions...");
         if (Config.debugMode) { Bukkit.getConsoleSender().sendMessage("- Debug mode enabled, extra logging will be shown."); }
+        if (Config.debugMode) { Bukkit.getConsoleSender().sendMessage("- Using " + (CheckForPaper.isPaperServer() ? "built in" : "shaded") + " Adventure support."); }
         Bukkit.getConsoleSender().sendMessage("-----------------------------------------------------------");
     }
 
