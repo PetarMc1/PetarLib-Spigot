@@ -146,9 +146,11 @@ public class PetarLibCommand implements CommandExecutor {
                 boolean currentDebug = getPlugin().getConfig().getBoolean("debug");
                 if (!currentDebug) {
                     getPlugin().getConfig().set("debug", true);
+                    getPlugin().saveConfig();
                     sendMessage(sender, Config.getMessage("debug-enabled"));
                 } else {
                     getPlugin().getConfig().set("debug", false);
+                    getPlugin().saveConfig();
                     sendMessage(sender, Config.getMessage("debug-disabled"));
                 }
                 break;
