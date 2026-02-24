@@ -2,6 +2,7 @@ package com.petarmc.petarlib.commands;
 
 import com.petarmc.petarlib.Config;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -28,7 +29,11 @@ public class PetarLibCommand implements CommandExecutor {
 
     private void sendMessage(CommandSender sender, String message) {
         if (Config.useMiniMessage()) {
-            sender.sendMessage(mm.deserialize(message));
+            if (getPlugin().hasAdventure()) {
+                getPlugin().adventure().sender(sender).sendMessage(mm.deserialize(message));
+            } else {
+                sender.sendMessage(stripMiniMessageTags(message));
+            }
         } else {
             sender.sendMessage(stripMiniMessageTags(message));
         }
@@ -37,13 +42,27 @@ public class PetarLibCommand implements CommandExecutor {
     private void petarLibSendCmd(String text, Player player, Type type) {
         String processed = text;
         if (Config.useMiniMessage()) {
-            switch (type) {
-                case ACTIONBAR:
-                    player.sendActionBar(mm.deserialize(processed));
-                    break;
-                case CHAT:
-                    player.sendMessage(mm.deserialize(processed));
-                    break;
+            Component comp = mm.deserialize(processed);
+            if (getPlugin().hasAdventure()) {
+                switch (type) {
+                    case ACTIONBAR:
+                        getPlugin().adventure().player(player).sendActionBar(comp);
+                        break;
+                    case CHAT:
+                        getPlugin().adventure().player(player).sendMessage(comp);
+                        break;
+                }
+            } else {
+                switch (type) {
+                    case ACTIONBAR:
+                        getPlugin().getLogger().info(Config.debugMode ? "Using non Adventure actionbar message" : null);
+                        player.sendActionBar(stripMiniMessageTags(processed));
+                        break;
+                    case CHAT:
+                        getPlugin().getLogger().info(Config.debugMode ? "Using non Adventure chat message" : null);
+                        player.sendMessage(stripMiniMessageTags(processed));
+                        break;
+                }
             }
         } else {
             processed = stripMiniMessageTags(text);
@@ -75,9 +94,9 @@ public class PetarLibCommand implements CommandExecutor {
                 showHelp(sender);
                 break;
             case "info":
-                sender.sendMessage(mm.deserialize("<aqua>Plugin: <white>" + getPlugin().getDescription().getName()));
-                sender.sendMessage(mm.deserialize("<aqua>Author(s): <white>" + String.join(", ", getPlugin().getDescription().getAuthors())));
-                sender.sendMessage(mm.deserialize("<aqua>Version: <white>" + getPlugin().getDescription().getVersion()));
+                sendMessage(sender, "<aqua>Plugin: <white>" + getPlugin().getDescription().getName());
+                sendMessage(sender, "<aqua>Author(s): <white>" + String.join(", ", getPlugin().getDescription().getAuthors()));
+                sendMessage(sender, "<aqua>Version: <white>" + getPlugin().getDescription().getVersion());
                 break;
             case "version":
                 sendMessage(sender, Config.getMessage("info-version"));
@@ -162,12 +181,12 @@ public class PetarLibCommand implements CommandExecutor {
     }
 
     private void showHelp(CommandSender sender) {
-            sender.sendMessage(mm.deserialize("<gold>--- PetarLib Help ---"));
-            sender.sendMessage(mm.deserialize("<yellow>/petarlib help<white> - Show this help message"));
-            sender.sendMessage(mm.deserialize("<yellow>/petarlib info<white> - Show plugin information"));
-            sender.sendMessage(mm.deserialize("<yellow>/petarlib version<white> - Show plugin version"));
-            sender.sendMessage(mm.deserialize("<yellow>/petarlib send <type> <player> <message><white> - Send a message to a player. Type can be 'chat' or 'actionbar'"));
-            sender.sendMessage(mm.deserialize("<yellow>/petarlib reload<white> - Reload plugin config"));
-            sender.sendMessage(mm.deserialize("<yellow>/petarlib debug<white> - Toggle debug mode"));
+            sendMessage(sender, "<gold>--- PetarLib Help ---");
+            sendMessage(sender, "<yellow>/petarlib help<white> - Show this help message");
+            sendMessage(sender, "<yellow>/petarlib info<white> - Show plugin information");
+            sendMessage(sender, "<yellow>/petarlib version<white> - Show plugin version");
+            sendMessage(sender, "<yellow>/petarlib send <type> <player> <message><white> - Send a message to a player. Type can be 'chat' or 'actionbar'");
+            sendMessage(sender, "<yellow>/petarlib reload<white> - Reload plugin config");
+            sendMessage(sender, "<yellow>/petarlib debug<white> - Toggle debug mode");
     }
 }
