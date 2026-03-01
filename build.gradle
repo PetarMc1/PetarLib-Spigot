@@ -81,7 +81,7 @@ processResources {
 
 def buildNum = project.findProperty('buildNumber')?.toString();
 if (buildNum) {
-    project.version = "${project.version}-${buildNum}"
+    project.version = "${buildNum}"
 }
 
 def repoUrl = project.version.toString().toUpperCase().contains("SNAPSHOT") ?
@@ -124,8 +124,9 @@ shadowJar {
     mergeServiceFiles()
     configurations = [project.configurations.bukkitImplementation, project.configurations.runtimeClasspath]
 
-    relocate 'net.kyori', 'com.petarmc.petarlib.kyori'
+    relocate 'net.kyori.adventure', 'com.petarmc.petarlib.kyori.adventure'
     relocate "org.bstats", project.group.toString()
+    minimize()
 }
 
 
